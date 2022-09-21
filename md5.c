@@ -6,17 +6,11 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:29:22 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/09/19 23:04:47 by herrfalco        ###   ########.fr       */
+/*   Updated: 2022/09/21 07:00:12 by herrfalco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#define BUFF_SZ		128
-#define BLOCK_SZ	64
+#include "includes.h"
 
 const uint32_t	keys[] = {	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 							0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
@@ -35,13 +29,6 @@ const uint32_t	keys[] = {	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 							0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
 							0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391 };
 const uint8_t	rot[] = {	7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21 };
-
-typedef struct		md5_s {
-	uint32_t		a;
-	uint32_t		b;
-	uint32_t		c;
-	uint32_t		d;
-}					md5_t;
 
 uint32_t		to_le_32(uint32_t val) {
 	return ((val << 24) | (val >> 24) | ((val >> 8) & 0xff00) | ((val << 8) & 0xff0000));
@@ -65,7 +52,7 @@ md5_t		*md5_new(void) {
 	return (&new);
 }
 
-void		md5_block(md5_t *md5, uint32_t *block) {
+static void		md5_block(md5_t *md5, uint32_t *block) {
 	uint8_t			i;
 	uint32_t		new_a, n;
 	md5_t			md5_sav = *md5;
