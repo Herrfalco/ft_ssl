@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   md5_test.c                                         :+:      :+:    :+:   */
+/*   sha256_test.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
+/*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/21 06:35:49 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/09/24 12:15:31 by fcadet           ###   ########.fr       */
+/*   Created: 2022/09/24 12:06:57 by fcadet            #+#    #+#             */
+/*   Updated: 2022/09/24 12:16:00 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,31 @@
 #include <fcntl.h>
 #include "includes.h"
 
-#include <openssl/md5.h>
+#include <openssl/sha.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #define MEM_SZ		(uint64_t)pow(2, 12)
 #define RAND_NB		10
 
-char		*md5_test(uint8_t *str, uint64_t sz) {
-    uint8_t			buff[MD5_DIGEST_LENGTH] = { 0 };
+
+char		*sha256_test(uint8_t *str, uint64_t sz) {
+    uint8_t			buff[SHA256_DIGEST_LENGTH] = { 0 };
 	static char		result[BUFF_SZ] = { 0 };
     uint8_t			i;
 
-    MD5((const unsigned char *)str, sz, buff);
-    for (i = 0; i < MD5_DIGEST_LENGTH; ++i)
+    SHA256((const unsigned char *)str, sz, buff);
+    for (i = 0; i < SHA256_DIGEST_LENGTH; ++i) {
         sprintf(result + 2 * i, "%02x", buff[i]);
+	}
 	return (result);
 }
 
-char		*md5_cust(uint8_t *str, uint64_t sz) {
-	md5_t		*md5 = md5_new();
+char		*sha256_cust(uint8_t *str, uint64_t sz) {
+	sha256_t		*sha256 = sha256_new();
 
-	md5_mem(md5, str, sz);
-	return (md5_result(md5));
+	sha256_mem(sha256, str, sz);
+	return (sha256_result(sha256));
 }
 
 int			main(void) {
@@ -53,14 +55,14 @@ int			main(void) {
 		return (1);
 	}
 	for (sz = 0; sz <= MEM_SZ; ++sz) {
-		if (strcmp(md5_test(mem, sz), md5_cust(mem, sz))) {
+		if (strcmp(sha256_test(mem, sz), sha256_cust(mem, sz))) {
 			fprintf(stderr, "%s%lu%s\n",
-					"MD5 with ", sz, " byte(s): KO");
+					"SHA256 with ", sz, " byte(s): KO");
 			free(mem);
 			return (2);
 		}
 	}
-	printf("MD5 with up to %lu byte(s): OK\n", MEM_SZ);
+	printf("SHA256 with up to %lu byte(s): OK\n", MEM_SZ);
 	free(mem);
 	return (0);
 }

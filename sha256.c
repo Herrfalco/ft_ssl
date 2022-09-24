@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/09/24 10:19:03 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/09/24 12:11:30 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ char		*sha256_result(sha256_t *sha256) {
 	static char		buff[BUFF_SZ];
 
 	sprintf(buff, "%08x%08x%08x%08x%08x%08x%08x%08x",
-			swap_end_32(sha256->a), swap_end_32(sha256->b), swap_end_32(sha256->c), swap_end_32(sha256->d), swap_end_32(sha256->e), swap_end_32(sha256->f), swap_end_32(sha256->g), swap_end_32(sha256->h));
+			sha256->a, sha256->b, sha256->c, sha256->d,
+			sha256->e, sha256->f, sha256->g, sha256->h);
 	return (buff);
 }
 
@@ -52,10 +53,10 @@ sha256_t	*sha256_new(void) {
 }
 
 static uint32_t	*sha256_get_words(uint32_t *block) {
-	static uint32_t		words[64];
+	static uint32_t		words[BLOCK_SZ];
 	uint8_t				i;
 
-	for (i = 0; i < 64; ++i) {
+	for (i = 0; i < BLOCK_SZ; ++i) {
 		if (i < 16)
 			words[i] = swap_end_32(block[i]);
 		else
@@ -73,10 +74,41 @@ static uint32_t	*sha256_get_words(uint32_t *block) {
 
 static void		sha256_proc_block(sha256_t *sha256, uint32_t *block) {
 	uint64_t		i;
+	uint32_t		new_a;
 	uint32_t		*words = sha256_get_words(block);
+	sha256_t		sha256_sav = *sha256;
 
-	for (i = 0; i < 64; ++i)
-		printf("%u\n", words[i]);
+	for (i = 0; i < BLOCK_SZ; ++i) {
+		new_a = words[i] + keys[i] + sha256->h
+			+ ((sha256->e & sha256->f) ^ ((~sha256->e) & sha256->g))
+			+ (rot_32(sha256->e, 6, RIGHT)
+				^ rot_32(sha256->e, 11, RIGHT)
+				^ rot_32(sha256->e, 25, RIGHT));
+		sha256->d += new_a;
+		new_a += ((sha256->a & sha256->b)
+				^ (sha256->a & sha256->c)
+				^ (sha256->b & sha256->c))
+			+ (rot_32(sha256->a, 2, RIGHT)
+				^ rot_32(sha256->a, 13, RIGHT)
+				^ rot_32(sha256->a, 22, RIGHT));
+
+		sha256->h = sha256->g;
+		sha256->g = sha256->f;
+		sha256->f = sha256->e;
+		sha256->e = sha256->d;
+		sha256->d = sha256->c;
+		sha256->c = sha256->b;
+		sha256->b = sha256->a;
+		sha256->a = new_a;
+	}
+	sha256->a += sha256_sav.a;
+	sha256->b += sha256_sav.b;
+	sha256->c += sha256_sav.c;
+	sha256->d += sha256_sav.d;
+	sha256->e += sha256_sav.e;
+	sha256->f += sha256_sav.f;
+	sha256->g += sha256_sav.g;
+	sha256->h += sha256_sav.h;
 }
 
 void		sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size) {
@@ -98,20 +130,4 @@ void		sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size) {
 			= swap_end_64(saved_sz * 8);
 	}
 	sha256_proc_block(sha256, (uint32_t *)block_buff);
-}
-
-int			main(int argc, char **argv) {
-	sha256_t		sha256 = {
-		.a = 0x01020304,
-		.b = 0x05060708,
-		.c = 0x09101112,
-		.d = 0x13141516,
-		.e = 0x17181920,
-		.f = 0x21222324,
-		.g = 0x25262728,
-		.h = 0x29303132 };
-	uint64_t		size = strlen(argv[1]);
-
-	sha256_mem(&sha256, argv[1], size);
-	return (0);
 }
