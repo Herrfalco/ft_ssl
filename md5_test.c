@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:35:49 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/09/21 07:14:54 by herrfalco        ###   ########.fr       */
+/*   Updated: 2022/09/22 09:27:58 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,53 @@
 #include "includes.h"
 
 #include <openssl/md5.h>
-#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-void md5_hash_from_string (char *string, char *hash)
-{
-    int i;
-    char unsigned md5[MD5_DIGEST_LENGTH] = {0};
+#define MEM_SZ		(uint64_t)pow(2, 12)
+#define RAND_NB		10
 
-    MD5((const unsigned char *)string, strlen(string), md5);
+char		*md5_test(uint8_t *str, uint64_t sz) {
+    uint8_t			buff[MD5_DIGEST_LENGTH] = { 0 };
+	static char		result[BUFF_SZ] = { 0 };
+    uint8_t			i;
 
-    for (i=0; i < MD5_DIGEST_LENGTH; i++) {
-        sprintf(hash + 2*i, "%02x", md5[i]);
-    }
+    MD5((const unsigned char *)str, sz, buff);
+    for (i = 0; i < MD5_DIGEST_LENGTH; ++i)
+        sprintf(result + 2 * i, "%02x", buff[i]);
+	return (result);
+}
+
+char		*md5_cust(uint8_t *str, uint64_t sz) {
+	md5_t		*md5 = md5_new();
+
+	md5_mem(md5, str, sz);
+	return (md5_result(md5));
 }
 
 int			main(void) {
-	uint8_t		buff[BLOCK_SZ];
-	int			rand_fd = open("/dev/urandom", O_RDONLY);
-	uint64_t	i, sz;
+	char		output[BUFF_SZ];
+	int			fd;
+	uint8_t		*mem = NULL;
+	uint64_t	sz;
 
-	if (rand_fd < 0) {
+	if ((fd = open("/dev/random", O_RDONLY)) < 0
+			|| !(mem = malloc(MEM_SZ))
+			|| read(fd, mem, MEM_SZ) != MEM_SZ) {
 		fprintf(stderr, "Error: Can't generate random number\n");
+		if (mem)
+			free(mem);
 		return (1);
 	}
-	for (i = 1; i <= pow(2, 25); i *= 2) {
-		for (sz = i; sz; sz -= sz < 512 ? sz : 512) {
+	for (sz = 0; sz <= MEM_SZ; ++sz) {
+		if (strcmp(md5_test(mem, sz), md5_cust(mem, sz))) {
+			fprintf(stderr, "%s%lu%s\n",
+					"Md5 with ", sz, " byte(s): KO");
+			free(mem);
+			return (2);
 		}
 	}
+	printf("Md5 with up to %lu byte(s): OK\n", MEM_SZ);
+	free(mem);
 	return (0);
 }

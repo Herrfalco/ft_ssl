@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:29:22 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/09/21 07:00:12 by herrfalco        ###   ########.fr       */
+/*   Updated: 2022/09/24 09:40:35 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,25 @@ const uint32_t	keys[] = {	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 							0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391 };
 const uint8_t	rot[] = {	7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21 };
 
-uint32_t		to_le_32(uint32_t val) {
-	return ((val << 24) | (val >> 24) | ((val >> 8) & 0xff00) | ((val << 8) & 0xff0000));
-}
-
 char		*md5_result(md5_t *md5) {
 	static char		buff[BUFF_SZ];
 
 	sprintf(buff, "%08x%08x%08x%08x",
-			to_le_32(md5->a), to_le_32(md5->b), to_le_32(md5->c), to_le_32(md5->d));
+			swap_end_32(md5->a), swap_end_32(md5->b), swap_end_32(md5->c), swap_end_32(md5->d));
 	return (buff);
 }
 
 md5_t		*md5_new(void) {
 	static md5_t	new;
 
-	new.a = to_le_32(0x01234567);
-	new.b = to_le_32(0x89abcdef);
-	new.c = to_le_32(0xfedcba98);
-	new.d = to_le_32(0x76543210);
+	new.a = swap_end_32(0x01234567);
+	new.b = swap_end_32(0x89abcdef);
+	new.c = swap_end_32(0xfedcba98);
+	new.d = swap_end_32(0x76543210);
 	return (&new);
 }
 
-static void		md5_block(md5_t *md5, uint32_t *block) {
+static void		md5_proc_block(md5_t *md5, uint32_t *block) {
 	uint8_t			i;
 	uint32_t		new_a, n;
 	md5_t			md5_sav = *md5;
@@ -62,19 +58,23 @@ static void		md5_block(md5_t *md5, uint32_t *block) {
 		n = rot[(i / 16 * 4) + (i % 4)];
 		switch (i / 16) {
 			case 0:
-				new_a += ((md5->b & md5->c) | ((~md5->b) & md5->d)) + block[i];
+				new_a += ((md5->b & md5->c) | ((~md5->b) & md5->d))
+					+ block[i];
 				break;
 			case 1:
-				new_a += ((md5->b & md5->d) | (md5->c & (~md5->d))) + block[(i * 5 + 1) % 16];
+				new_a += ((md5->b & md5->d) | (md5->c & (~md5->d)))
+					+ block[(i * 5 + 1) % 16];
 				break;
 			case 2:
-				new_a += (md5->b ^ md5->c ^ md5->d) + block[(i * 3 + 5) % 16];
+				new_a += (md5->b ^ md5->c ^ md5->d)
+					+ block[(i * 3 + 5) % 16];
 				break;
 			default:
-				new_a += (md5->c ^ (md5->b | (~md5->d))) + block[(i * 7) % 16];
+				new_a += (md5->c ^ (md5->b | (~md5->d)))
+					+ block[(i * 7) % 16];
 		}
 		new_a += keys[i];
-		new_a = ((new_a << n) | (new_a >> (32 - n))) + md5->b;
+		new_a = rot_32(new_a, n, LEFT) + md5->b;
 
 		md5->a = md5->d;
 		md5->d = md5->c;
@@ -88,21 +88,20 @@ static void		md5_block(md5_t *md5, uint32_t *block) {
 }
 
 void		md5_mem(md5_t *md5, uint8_t *mem, uint64_t size) {
-	uint8_t		last_block[BLOCK_SZ] = { 0 };
-	uint64_t	saved_sz = size;
+	uint8_t			block_buff[BLOCK_SZ] = { 0 };
+	uint64_t		saved_sz = size;
 
-	for (; size >= BLOCK_SZ; mem += BLOCK_SZ, size -= BLOCK_SZ)
-		md5_block(md5, (uint32_t *)mem);
-	memcpy(last_block, mem, size);
-	last_block[size] = 0x80;
-	*(uint64_t *)(last_block + (BLOCK_SZ - 8)) = saved_sz * 8;
-	md5_block(md5, (uint32_t *)&last_block);
-}
-
-int		main(int argc, char **argv) {
-	md5_t		*md5 = md5_new();
-
-	md5_mem(md5, (uint8_t *)argv[1], strlen(argv[1]));
-	printf("%s\n", md5_result(md5));
-	return (0);
+	for (; size >= BLOCK_SZ; mem += BLOCK_SZ,
+			size -= size < BLOCK_SZ ? size : BLOCK_SZ)
+		md5_proc_block(md5, (uint32_t *)mem);
+	memcpy(&block_buff, mem, size);
+	block_buff[size] = 0x80;
+	if (BLOCK_SZ - (size + 1) >= 8)
+		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz * 8;
+	else {
+		md5_proc_block(md5, (uint32_t *)block_buff);
+		bzero(block_buff, BLOCK_SZ);
+		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz * 8;
+	}
+	md5_proc_block(md5, (uint32_t *)block_buff);
 }
