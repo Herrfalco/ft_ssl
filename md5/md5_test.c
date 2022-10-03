@@ -6,19 +6,19 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:35:49 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/09/24 12:15:31 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/09/24 13:14:33 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 #include <fcntl.h>
-#include "includes.h"
+#include "../includes.h"
 
 #include <openssl/md5.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#define MEM_SZ		(uint64_t)pow(2, 12)
+#define MEM_SZ		(uint64_t)pow(2, 14)
 #define RAND_NB		10
 
 char		*md5_test(uint8_t *str, uint64_t sz) {
@@ -27,8 +27,9 @@ char		*md5_test(uint8_t *str, uint64_t sz) {
     uint8_t			i;
 
     MD5((const unsigned char *)str, sz, buff);
-    for (i = 0; i < MD5_DIGEST_LENGTH; ++i)
+    for (i = 0; i < MD5_DIGEST_LENGTH; ++i) {
         sprintf(result + 2 * i, "%02x", buff[i]);
+	}
 	return (result);
 }
 
