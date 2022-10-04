@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   md5_test.c                                         :+:      :+:    :+:   */
+/*   sha512_test.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
+/*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/21 06:35:49 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/04 19:28:52 by fcadet           ###   ########.fr       */
+/*   Created: 2022/09/24 12:06:57 by fcadet            #+#    #+#             */
+/*   Updated: 2022/10/03 19:40:42 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,33 @@
 #include <fcntl.h>
 #include "../includes.h"
 
-#include <openssl/md5.h>
+#include <openssl/sha.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #define MEM_SZ		(uint64_t)pow(2, 14)
 #define RAND_NB		10
 
-char		*md5_test(uint8_t *str, uint64_t sz) {
-    uint8_t			buff[MD5_DIGEST_LENGTH] = { 0 };
+
+char		*sha512_test(uint8_t *str, uint64_t sz) {
+    uint8_t			buff[SHA512_DIGEST_LENGTH] = { 0 };
 	static char		result[BUFF_SZ] = { 0 };
     uint8_t			i;
 
-    MD5((const unsigned char *)str, sz, buff);
-    for (i = 0; i < MD5_DIGEST_LENGTH; ++i) {
+    SHA512((const unsigned char *)str, sz, buff);
+    for (i = 0; i < SHA512_DIGEST_LENGTH; ++i) {
         sprintf(result + 2 * i, "%02x", buff[i]);
 	}
+	printf("%s\n", result);
 	return (result);
 }
 
-char		*md5_cust(uint8_t *str, uint64_t sz) {
-	md5_t		*md5 = md5_new();
+char		*sha512_cust(uint8_t *str, uint64_t sz) {
+	sha512_t		*sha512 = sha512_new();
 
-	md5_mem(md5, str, sz);
-	return (md5_result(md5));
+	sha512_mem(sha512, str, sz);
+	printf("%s\n", sha512_result(sha512));
+	return (sha512_result(sha512));
 }
 
 int			main(void) {
@@ -54,14 +57,14 @@ int			main(void) {
 		return (1);
 	}
 	for (sz = 0; sz <= MEM_SZ; ++sz) {
-		if (strcmp(md5_test(mem, sz), md5_cust(mem, sz))) {
+		if (strcmp(sha512_test(mem, sz), sha512_cust(mem, sz))) {
 			fprintf(stderr, "%s%lu%s\n",
-					"MD5 with ", sz, " byte(s): KO");
+					"SHA512 with ", sz, " byte(s): KO");
 			free(mem);
 			return (2);
 		}
 	}
-	printf("MD5 with up to %lu byte(s): OK\n", MEM_SZ);
+	printf("SHA512 with up to %lu byte(s): OK\n", MEM_SZ);
 	free(mem);
 	return (0);
 }

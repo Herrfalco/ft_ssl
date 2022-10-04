@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:36:40 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/03 18:42:28 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/04 19:30:07 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,19 @@
 #include <string.h>
 #include <stdio.h>
 
-#define BUFF_SZ		128
-#define BLOCK_SZ	64
+#define BUFF_SZ			256
+#define BLOCK_SZ		64
+#define BIG_BLOCK_SZ	128
+#define BIG_RND_NB		80
+
+typedef __uint128_t	uint128_t;
+
+typedef enum		byte_sz_e {
+	BS_16 = 16,
+	BS_32 = 32,
+	BS_64 = 64,
+	BS_128 = 128,
+}					byte_sz_t;
 
 typedef struct		md5_s {
 	uint32_t		a;
@@ -40,14 +51,27 @@ typedef struct		sha256_s {
 
 typedef sha256_t	sha224_t;
 
+typedef struct		sha512_s {
+	uint64_t		a;
+	uint64_t		b;
+	uint64_t		c;
+	uint64_t		d;
+	uint64_t		e;
+	uint64_t		f;
+	uint64_t		g;
+	uint64_t		h;
+}					sha512_t;
+
 typedef enum		rot_e {
 	LEFT,
 	RIGHT,
 }					rot_t;
 
+void			swap_end(void *val, byte_sz_t byte_sz);
 uint32_t		swap_end_32(uint32_t val);
-uint64_t		swap_end_64(uint64_t val);
+
 uint32_t		rot_32(uint32_t val, uint8_t n, rot_t typ);
+uint64_t		rot_64(uint64_t val, uint8_t n, rot_t typ);
 
 char		*md5_result(md5_t *md5);
 md5_t		*md5_new(void);
@@ -60,5 +84,9 @@ void		sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size);
 char		*sha224_result(sha224_t *sha224);
 sha224_t	*sha224_new(void);
 void		sha224_mem(sha224_t *sha224, uint8_t *mem, uint64_t size);
+
+char		*sha512_result(sha512_t *sha512);
+sha512_t	*sha512_new(void);
+void		sha512_mem(sha512_t *sha512, uint8_t *mem, uint64_t size);
 
 #endif // INCLUDES_H

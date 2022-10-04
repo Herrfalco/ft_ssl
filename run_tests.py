@@ -18,7 +18,10 @@ if __name__ == '__main__':
                 print(f"""Error: Can't find "{d}" tests""")
                 sys.exit(1)
             else:
-                sys.exit(os.system(f'make -s -C {d} re; ./{d}/{d}_test; make -s -C {d} fclean'))
+                os.system(f'make -s -C {d} re')
+                os.system(f'./{d}/{d}_test')
+                os.system(f'make -s -C {d} fclean')
+                sys.exit(0)
 
     for pid in PIDS:
         os.waitpid(pid, 0)
