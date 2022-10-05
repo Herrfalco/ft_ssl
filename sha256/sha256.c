@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/04 20:09:57 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/04 20:19:46 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static uint32_t	*sha256_get_words(uint32_t *block) {
 	for (i = 0; i < BLOCK_SZ; ++i) {
 		if (i < 16) {
 			words[i] = block[i];
-			swap_end(words + i, BS_32);
+			reverse(words + i, BS_32);
 		} else
 			words[i] = (rot_32(words[i - 2], 17, RIGHT)
 					^ rot_32(words[i - 2], 19, RIGHT)
@@ -117,7 +117,7 @@ void		sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size) {
 	uint8_t			block_buff[BLOCK_SZ] = { 0 };
 	uint64_t		saved_sz = size * 8;
 
-	swap_end(&saved_sz, BS_64);
+	reverse(&saved_sz, BS_64);
 	for (; size >= BLOCK_SZ;
 			mem += BLOCK_SZ, size -= BLOCK_SZ)
 		sha256_proc_block(sha256, (uint32_t *)mem);

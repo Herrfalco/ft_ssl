@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:36:40 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/04 19:30:07 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/05 14:21:54 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,9 @@ typedef enum		rot_e {
 	RIGHT,
 }					rot_t;
 
-void			swap_end(void *val, byte_sz_t byte_sz);
-uint32_t		swap_end_32(uint32_t val);
-
-uint32_t		rot_32(uint32_t val, uint8_t n, rot_t typ);
-uint64_t		rot_64(uint64_t val, uint8_t n, rot_t typ);
+void			reverse(void *val, byte_sz_t bs);
+uint32_t		rot_32(uint32_t val, uint16_t n, rot_t typ);
+uint64_t		rot_64(uint64_t val, uint16_t n, rot_t typ);
 
 char		*md5_result(md5_t *md5);
 md5_t		*md5_new(void);

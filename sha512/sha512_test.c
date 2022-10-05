@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 12:06:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/03 19:40:42 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/05 17:14:09 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ char		*sha512_test(uint8_t *str, uint64_t sz) {
     for (i = 0; i < SHA512_DIGEST_LENGTH; ++i) {
         sprintf(result + 2 * i, "%02x", buff[i]);
 	}
-	printf("%s\n", result);
 	return (result);
 }
 
@@ -39,32 +38,39 @@ char		*sha512_cust(uint8_t *str, uint64_t sz) {
 	sha512_t		*sha512 = sha512_new();
 
 	sha512_mem(sha512, str, sz);
-	printf("%s\n", sha512_result(sha512));
 	return (sha512_result(sha512));
 }
 
-int			main(void) {
+int			main(int argc, char **argv) {
 	int			fd;
+	uint64_t	mem_sz = MEM_SZ, sz;
 	uint8_t		*mem = NULL;
-	uint64_t	sz;
+	ssize_t		read_ret;
 
+	if (argc > 1) {
+		mem_sz = (uint64_t)atoi(argv[1]);
+		if ((int)mem_sz < 0) {
+			fprintf(stderr, "Error: Invalid parameter\n");
+			return (1);
+		}
+	}
 	if ((fd = open("/dev/random", O_RDONLY)) < 0
-			|| !(mem = malloc(MEM_SZ))
-			|| read(fd, mem, MEM_SZ) != MEM_SZ) {
+			|| !(mem = malloc(mem_sz))
+			|| (read_ret = read(fd, mem, mem_sz)) < 0
+			|| (uint64_t)read_ret != mem_sz) {
 		fprintf(stderr, "Error: Can't generate random number\n");
 		if (mem)
 			free(mem);
 		return (1);
 	}
-	for (sz = 0; sz <= MEM_SZ; ++sz) {
+	for (sz = 0; sz <= mem_sz; ++sz) {
 		if (strcmp(sha512_test(mem, sz), sha512_cust(mem, sz))) {
-			fprintf(stderr, "%s%lu%s\n",
-					"SHA512 with ", sz, " byte(s): KO");
+			fprintf(stderr, "SHA512 with %lu byte(s): KO\n", sz);
 			free(mem);
 			return (2);
 		}
 	}
-	printf("SHA512 with up to %lu byte(s): OK\n", MEM_SZ);
+	printf("SHA512 with up to %lu byte(s): OK\n", mem_sz);
 	free(mem);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:29:22 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/04 19:45:13 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/04 20:21:10 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ char		*md5_result(md5_t *md5) {
 	static char		buff[BUFF_SZ];
 	md5_t			sw_md5 = *md5;
 
-	swap_end(&sw_md5.a, BS_32);
-	swap_end(&sw_md5.b, BS_32);
-	swap_end(&sw_md5.c, BS_32);
-	swap_end(&sw_md5.d, BS_32);
+	reverse(&sw_md5.a, BS_32);
+	reverse(&sw_md5.b, BS_32);
+	reverse(&sw_md5.c, BS_32);
+	reverse(&sw_md5.d, BS_32);
 	sprintf(buff, "%08x%08x%08x%08x", sw_md5.a, sw_md5.b, sw_md5.c, sw_md5.d);
 	return (buff);
 }
@@ -51,10 +51,10 @@ md5_t		*md5_new(void) {
 	new.c = 0xfedcba98,
 	new.d = 0x76543210,
 
-	swap_end(&new.a, BS_32);
-	swap_end(&new.b, BS_32);
-	swap_end(&new.c, BS_32);
-	swap_end(&new.d, BS_32);
+	reverse(&new.a, BS_32);
+	reverse(&new.b, BS_32);
+	reverse(&new.c, BS_32);
+	reverse(&new.d, BS_32);
 	return (&new);
 }
 

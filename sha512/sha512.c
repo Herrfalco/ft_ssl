@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/04 18:09:49 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/05 16:52:55 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,17 @@ static uint64_t	*sha512_get_words(uint64_t *block) {
 	uint8_t				i;
 
 	for (i = 0; i < BIG_RND_NB; ++i) {
-		if (i < 16)
-			words[i] = swap_end_64(block[i]);
-		else
-			words[i] = (rot_64(words[i - 2], 17, RIGHT)
-					^ rot_64(words[i - 2], 19, RIGHT)
-					^ (words[i - 2] >> 10))
+		if (i < 16) {
+			words[i] = block[i];
+			reverse(words + i, BS_64);
+		} else
+			words[i] = (rot_64(words[i - 2], 19, RIGHT)
+					^ rot_64(words[i - 2], 61, RIGHT)
+					^ (words[i - 2] >> 6))
 				+ words[i - 7]
-				+ (rot_64(words[i - 15], 7, RIGHT)
-					^ rot_64(words[i - 15], 18, RIGHT)
-					^ (words[i - 15] >> 3))
+				+ (rot_64(words[i - 15], 1, RIGHT)
+					^ rot_64(words[i - 15], 8, RIGHT)
+					^ (words[i - 15] >> 7))
 				+ words[i - 16];
 	}
 	return (words);
@@ -86,16 +87,16 @@ static void		sha512_proc_block(sha512_t *sha512, uint64_t *block) {
 	for (i = 0; i < BIG_RND_NB; ++i) {
 		new_a = words[i] + keys[i] + sha512->h
 			+ ((sha512->e & sha512->f) ^ ((~sha512->e) & sha512->g))
-			+ (rot_64(sha512->e, 6, RIGHT)
-				^ rot_64(sha512->e, 11, RIGHT)
-				^ rot_64(sha512->e, 25, RIGHT));
+			+ (rot_64(sha512->e, 14, RIGHT)
+				^ rot_64(sha512->e, 18, RIGHT)
+				^ rot_64(sha512->e, 41, RIGHT));
 		sha512->d += new_a;
 		new_a += ((sha512->a & sha512->b)
 				^ (sha512->a & sha512->c)
 				^ (sha512->b & sha512->c))
-			+ (rot_64(sha512->a, 2, RIGHT)
-				^ rot_64(sha512->a, 13, RIGHT)
-				^ rot_64(sha512->a, 22, RIGHT));
+			+ (rot_64(sha512->a, 28, RIGHT)
+				^ rot_64(sha512->a, 34, RIGHT)
+				^ rot_64(sha512->a, 39, RIGHT));
 
 		sha512->h = sha512->g;
 		sha512->g = sha512->f;
@@ -118,21 +119,20 @@ static void		sha512_proc_block(sha512_t *sha512, uint64_t *block) {
 
 void		sha512_mem(sha512_t *sha512, uint8_t *mem, uint64_t size) {
 	uint8_t			block_buff[BIG_BLOCK_SZ] = { 0 };
-	uint64_t		saved_sz = size;
+	uint128_t		saved_sz = size * 8;
 
+	reverse(&saved_sz, BS_128);
 	for (; size >= BIG_BLOCK_SZ;
 			mem += BIG_BLOCK_SZ, size -= BIG_BLOCK_SZ)
 		sha512_proc_block(sha512, (uint64_t *)mem);
 	memcpy(&block_buff, mem, size);
 	block_buff[size] = 0x80;
 	if (BIG_BLOCK_SZ - (size + 1) >= 16)
-		*(uint64_t *)(block_buff + BIG_BLOCK_SZ - 8)
-			= swap_end_64(saved_sz * 8);
+		*(uint128_t *)(block_buff + BIG_BLOCK_SZ - 16) = saved_sz;
 	else {
 		sha512_proc_block(sha512, (uint64_t *)block_buff);
 		bzero(block_buff, BIG_BLOCK_SZ);
-		*(uint64_t *)(block_buff + BIG_BLOCK_SZ - 8)
-			= swap_end_64(saved_sz * 8);
+		*(uint128_t *)(block_buff + BIG_BLOCK_SZ - 16) = saved_sz;
 	}
 	sha512_proc_block(sha512, (uint64_t *)block_buff);
 }

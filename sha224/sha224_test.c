@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 12:06:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/03 18:57:41 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/05 17:09:01 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,36 @@ char		*sha224_cust(uint8_t *str, uint64_t sz) {
 	return (sha224_result(sha224));
 }
 
-int			main(void) {
+int			main(int argc, char **argv) {
 	int			fd;
+	uint64_t	mem_sz = MEM_SZ, sz;
 	uint8_t		*mem = NULL;
-	uint64_t	sz;
+	ssize_t		read_ret;
 
+	if (argc > 1) {
+		mem_sz = (uint64_t)atoi(argv[1]);
+		if ((int)mem_sz < 0) {
+			fprintf(stderr, "Error: Invalid parameter\n");
+			return (1);
+		}
+	}
 	if ((fd = open("/dev/random", O_RDONLY)) < 0
-			|| !(mem = malloc(MEM_SZ))
-			|| read(fd, mem, MEM_SZ) != MEM_SZ) {
+			|| !(mem = malloc(mem_sz))
+			|| (read_ret = read(fd, mem, mem_sz)) < 0
+			|| (uint64_t)read_ret != mem_sz) {
 		fprintf(stderr, "Error: Can't generate random number\n");
 		if (mem)
 			free(mem);
 		return (1);
 	}
-	for (sz = 0; sz <= MEM_SZ; ++sz) {
+	for (sz = 0; sz <= mem_sz; ++sz) {
 		if (strcmp(sha224_test(mem, sz), sha224_cust(mem, sz))) {
-			fprintf(stderr, "%s%lu%s\n",
-					"SHA224 with ", sz, " byte(s): KO");
+			fprintf(stderr, "SHA224 with %lu byte(s): KO\n", sz);
 			free(mem);
 			return (2);
 		}
 	}
-	printf("SHA224 with up to %lu byte(s): OK\n", MEM_SZ);
+	printf("SHA224 with up to %lu byte(s): OK\n", mem_sz);
 	free(mem);
 	return (0);
 }
