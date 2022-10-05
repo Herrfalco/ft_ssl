@@ -6,7 +6,7 @@ import sys
 import os
 
 if __name__ == '__main__':
-    DIRS = ['md5', 'sha256', 'sha224', 'sha512']
+    DIRS = ['md5', 'sha256', 'sha224', 'sha512', 'sha384']
     PIDS = []
     S_OPT = False
     OPT = ""

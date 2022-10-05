@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:36:40 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/05 14:21:54 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/05 18:07:51 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ typedef struct		sha512_s {
 	uint64_t		h;
 }					sha512_t;
 
+typedef sha512_t	sha384_t;
+
 typedef enum		rot_e {
 	LEFT,
 	RIGHT,
@@ -86,5 +88,9 @@ void		sha224_mem(sha224_t *sha224, uint8_t *mem, uint64_t size);
 char		*sha512_result(sha512_t *sha512);
 sha512_t	*sha512_new(void);
 void		sha512_mem(sha512_t *sha512, uint8_t *mem, uint64_t size);
+
+char		*sha384_result(sha384_t *sha384);
+sha384_t	*sha384_new(void);
+void		sha384_mem(sha384_t *sha384, uint8_t *mem, uint64_t size);
 
 #endif // INCLUDES_H
