@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:29:22 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/04 20:21:10 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/08 16:32:24 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,21 +97,24 @@ static void		md5_proc_block(md5_t *md5, uint32_t *block) {
 	md5->d += md5_sav.d;
 }
 
-void		md5_mem(md5_t *md5, uint8_t *mem, uint64_t size) {
+int			md5_mem(md5_t *md5, uint8_t *mem, uint64_t size) {
 	uint8_t			block_buff[BLOCK_SZ] = { 0 };
-	uint64_t		saved_sz = size;
+	uint64_t		saved_sz = size * 8, max_sz = 0;
 
+	if (size > --max_sz / 8)
+		return (-1);
 	for (; size >= BLOCK_SZ;
 			mem += BLOCK_SZ, size -= BLOCK_SZ)
 		md5_proc_block(md5, (uint32_t *)mem);
 	memcpy(&block_buff, mem, size);
 	block_buff[size] = 0x80;
 	if (BLOCK_SZ - (size + 1) >= 8)
-		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz * 8;
+		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz;
 	else {
 		md5_proc_block(md5, (uint32_t *)block_buff);
 		bzero(block_buff, BLOCK_SZ);
-		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz * 8;
+		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz;
 	}
 	md5_proc_block(md5, (uint32_t *)block_buff);
+	return (0);
 }

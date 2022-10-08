@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/04 20:19:46 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/08 16:33:02 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,12 @@ static void		sha256_proc_block(sha256_t *sha256, uint32_t *block) {
 	sha256->h += sha256_sav.h;
 }
 
-void		sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size) {
+int			sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size) {
 	uint8_t			block_buff[BLOCK_SZ] = { 0 };
-	uint64_t		saved_sz = size * 8;
+	uint64_t		saved_sz = size * 8, max_sz = 0;
 
+	if (size > --max_sz / 8)
+		return (-1);
 	reverse(&saved_sz, BS_64);
 	for (; size >= BLOCK_SZ;
 			mem += BLOCK_SZ, size -= BLOCK_SZ)
@@ -131,4 +133,5 @@ void		sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size) {
 		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz;
 	}
 	sha256_proc_block(sha256, (uint32_t *)block_buff);
+	return (0);
 }

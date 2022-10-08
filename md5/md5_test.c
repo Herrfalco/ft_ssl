@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:35:49 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/05 17:04:30 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/05 18:34:59 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int			main(int argc, char **argv) {
 	ssize_t		read_ret;
 
 	if (argc > 1) {
-		mem_sz = (uint64_t)atoi(argv[1]);
-		if ((int)mem_sz < 0) {
+		mem_sz = (uint64_t)strtoll(argv[1], NULL, 10);
+		if ((int64_t)mem_sz < 1) {
 			fprintf(stderr, "Error: Invalid parameter\n");
 			return (1);
 		}

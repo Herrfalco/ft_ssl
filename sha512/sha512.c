@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/05 16:52:55 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/08 16:33:43 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,12 @@ static void		sha512_proc_block(sha512_t *sha512, uint64_t *block) {
 	sha512->h += sha512_sav.h;
 }
 
-void		sha512_mem(sha512_t *sha512, uint8_t *mem, uint64_t size) {
+int			sha512_mem(sha512_t *sha512, uint8_t *mem, uint128_t size) {
 	uint8_t			block_buff[BIG_BLOCK_SZ] = { 0 };
-	uint128_t		saved_sz = size * 8;
+	uint128_t		saved_sz = size * 8, max_sz = 0;
 
+	if (size > --max_sz / 8)
+		return (-1);
 	reverse(&saved_sz, BS_128);
 	for (; size >= BIG_BLOCK_SZ;
 			mem += BIG_BLOCK_SZ, size -= BIG_BLOCK_SZ)
@@ -135,4 +137,5 @@ void		sha512_mem(sha512_t *sha512, uint8_t *mem, uint64_t size) {
 		*(uint128_t *)(block_buff + BIG_BLOCK_SZ - 16) = saved_sz;
 	}
 	sha512_proc_block(sha512, (uint64_t *)block_buff);
+	return (0);
 }
