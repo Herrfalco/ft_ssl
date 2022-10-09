@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:36:40 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/08 16:31:49 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/09 10:43:50 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,31 @@
 #define BLOCK_SZ		64
 #define BIG_BLOCK_SZ	128
 #define BIG_RND_NB		80
+#define	OPT_NB			4
+#define ALG_NB			5
 
 typedef __uint128_t	uint128_t;
+
+const char			*ALG_STR[] = { "md5", "sha224", "sha256", "sha384", "sha512" };
+
+typedef enum		alg_e {
+	MD5,
+	SHA224,
+	SHA256,
+	SHA384,
+	SHA512,
+}					alg_t;
+
+const char			*OPT_STR[] = { "-p", "-q", "-r", "-s" };
+
+typedef uint8_t		opts_t;
+
+typedef enum		opt_e {
+	PRINT_O,
+	QUIET_O,
+	REV_O,
+	STR_O,
+}					opt_t;
 
 typedef enum		byte_sz_e {
 	BS_16 = 16,
