@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/08 16:19:43 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/13 17:56:14 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,7 @@ sha384_t	*sha384_new(void) {
 
 int			sha384_mem(sha384_t *sha384, uint8_t *mem, uint128_t size) {
 	return (sha512_mem(sha384, mem, size));
+}
+int			sha384_file(sha384_t *sha384, FILE *file) {
+	return (sha512_file(sha384, file));
 }

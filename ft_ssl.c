@@ -6,11 +6,40 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 16:52:32 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/09 10:49:22 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/10 10:25:15 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes.h"
+
+static const char			*ERR_STR[] = {
+	"No algorithm is given",
+	"Unknown algorithm \"%s\"",
+	"Duplicated option \"%s\"",
+};
+
+static const char			*ALG_STR[] = {
+	"md5",
+	"sha224",
+	"sha256",
+	"sha384",
+	"sha512" };
+static const char			*OPT_STR[] = {
+	"-p",
+	"-q",
+	"-r",
+	"-s" };
+
+int		error(err_t err, ...) {
+	static char		buff[BUFF_SZ];
+	va_list			datas;
+
+	va_start(datas, err);
+	vsnprintf(buff, BUFF_SZ, ERR_STR[err], datas);
+	va_end(datas);
+	fprintf(stderr, "Error: %s\n", buff);
+	return (err);
+}
 
 char	*parse_alg(alg_t *alg, int *argc, char ***argv) {
 		int				i;
@@ -26,30 +55,31 @@ char	*parse_alg(alg_t *alg, int *argc, char ***argv) {
 		return (**argv);
 }
 
+static void			opt_set(uint8_t *opts, opt_t opt) {
+	*opts |= (0x1 << opt);
+}
+
+static int			opt_isset(uint8_t *opts, opt_t opt) {
+	return (*opts & (0x1 << opt));
+}
+
 char	*parse_opts(opts_t *opts, int *argc, char ***argv) {
-	uint8_t			found;
-	int				i;
+	int				i, is_opt = 1;
 
 	*opts = 0;
 	for (; *argc; --(*argc), ++(*argv)) {
-		found = 0;
-		for (i = 0; i < OPT_NB; ++i) {
-			if (!strcmp(OPT_STR[i], **argv)) {
-				if (*opts & (0x1 << i))
+		for (i = 0, is_opt = 0; i < OPT_NB; ++i) {
+			if ((is_opt = !strcmp(OPT_STR[i], **argv))) {
+				if (opt_isset(opts, i))
 					return (**argv);
-				*opts |= (0x1 << i);
-				found = 1;
+				opt_set(opts, i);
 				break;
 			}
 		}
-		if (!found)
-			return (NULL);
+		if (!is_opt)
+			break;
 	}
 	return (NULL);
-}
-
-int			opt_isset(uint8_t *opts, opt_t opt) {
-	return (*opts & (0x1 << opt));
 }
 
 int			main(int argc, char **argv) {
@@ -57,20 +87,14 @@ int			main(int argc, char **argv) {
 	alg_t		alg;
 	char		*unk_alg, *dup_opt;
 
-	if (argc < 2) {
-		printf("Error: No algorithm selected\n");
-		return (-1);
-	}
+	if (argc < 2)
+		return (error(E_NO_ALG));
 	--argc;
 	++argv;
-	if ((unk_alg = parse_alg(&alg, &argc, &argv))) {
-		printf("Error: Unknown algorithm \"%s\"\n", unk_alg);
-		return (-2);
-	}
-	if ((dup_opt = parse_opts(&opts, &argc, &argv))) {
-		printf("Error: Duplicated option \"%s\"\n", dup_opt);
-		return (-3);
-	}
+	if ((unk_alg = parse_alg(&alg, &argc, &argv)))
+		return (error(E_UNK_ALG, unk_alg));
+	if ((dup_opt = parse_opts(&opts, &argc, &argv)))
+		return (error(E_DUP_OPT, dup_opt));
 
 	printf("%s\n", ALG_STR[alg]);
 

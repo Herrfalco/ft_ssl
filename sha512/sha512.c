@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/08 16:33:43 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/13 17:53:23 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,25 +117,21 @@ static void		sha512_proc_block(sha512_t *sha512, uint64_t *block) {
 	sha512->h += sha512_sav.h;
 }
 
-int			sha512_mem(sha512_t *sha512, uint8_t *mem, uint128_t size) {
-	uint8_t			block_buff[BIG_BLOCK_SZ] = { 0 };
-	uint128_t		saved_sz = size * 8, max_sz = 0;
-
-	if (size > --max_sz / 8)
-		return (-1);
-	reverse(&saved_sz, BS_128);
-	for (; size >= BIG_BLOCK_SZ;
-			mem += BIG_BLOCK_SZ, size -= BIG_BLOCK_SZ)
-		sha512_proc_block(sha512, (uint64_t *)mem);
-	memcpy(&block_buff, mem, size);
-	block_buff[size] = 0x80;
-	if (BIG_BLOCK_SZ - (size + 1) >= 16)
-		*(uint128_t *)(block_buff + BIG_BLOCK_SZ - 16) = saved_sz;
-	else {
+static void		sha512_proc_last_block(sha512_t *sha512, uint8_t *block_buff, uint128_t sav_sz, uint128_t rem_sz) {
+	block_buff[rem_sz] = 0x80;
+	if (BIG_BLOCK_SZ - (rem_sz + 1) < 16) {
 		sha512_proc_block(sha512, (uint64_t *)block_buff);
 		bzero(block_buff, BIG_BLOCK_SZ);
-		*(uint128_t *)(block_buff + BIG_BLOCK_SZ - 16) = saved_sz;
 	}
+	reverse(&sav_sz, BS_128);
+	*(uint128_t *)(block_buff + BIG_BLOCK_SZ - 16) = sav_sz;
 	sha512_proc_block(sha512, (uint64_t *)block_buff);
-	return (0);
+}
+
+int			sha512_mem(sha512_t *sha512, uint8_t *mem, uint128_t sz) {
+	return (hash_mem_64(sha512, mem, sz, sha512_proc_block, sha512_proc_last_block));
+}
+
+int			sha512_file(sha512_t *sha512, FILE *file) {
+	return (hash_file_64(sha512, file, sha512_proc_block, sha512_proc_last_block));
 }

@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/08 16:33:02 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/11 12:49:46 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,25 +113,21 @@ static void		sha256_proc_block(sha256_t *sha256, uint32_t *block) {
 	sha256->h += sha256_sav.h;
 }
 
-int			sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size) {
-	uint8_t			block_buff[BLOCK_SZ] = { 0 };
-	uint64_t		saved_sz = size * 8, max_sz = 0;
-
-	if (size > --max_sz / 8)
-		return (-1);
-	reverse(&saved_sz, BS_64);
-	for (; size >= BLOCK_SZ;
-			mem += BLOCK_SZ, size -= BLOCK_SZ)
-		sha256_proc_block(sha256, (uint32_t *)mem);
-	memcpy(&block_buff, mem, size);
-	block_buff[size] = 0x80;
-	if (BLOCK_SZ - (size + 1) >= 8)
-		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz;
-	else {
+static void		sha256_proc_last_block(sha256_t *sha256, uint8_t *block_buff, uint64_t sav_sz, uint64_t rem_sz) {
+	block_buff[rem_sz] = 0x80;
+	if (BLOCK_SZ - (rem_sz + 1) < 8) {
 		sha256_proc_block(sha256, (uint32_t *)block_buff);
 		bzero(block_buff, BLOCK_SZ);
-		*(uint64_t *)(block_buff + BLOCK_SZ - 8) = saved_sz;
 	}
+	reverse(&sav_sz, BS_64);
+	*(uint64_t *)(block_buff + BLOCK_SZ - 8) = sav_sz;
 	sha256_proc_block(sha256, (uint32_t *)block_buff);
-	return (0);
+}
+
+int			sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t sz) {
+	return (hash_mem_32(sha256, mem, sz, sha256_proc_block, sha256_proc_last_block));
+}
+
+int			sha256_file(sha256_t *sha256, FILE *file) {
+	return (hash_file_32(sha256, file, sha256_proc_block, sha256_proc_last_block));
 }

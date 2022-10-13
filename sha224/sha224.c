@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 18:32:13 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/08 16:34:12 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/11 11:15:31 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ sha224_t	*sha224_new(void) {
 	return (&new);
 }
 
-int			sha224_mem(sha224_t *sha224, uint8_t *mem, uint64_t size) {
-	return (sha256_mem(sha224, mem, size));
+int			sha224_mem(sha224_t *sha224, uint8_t *mem, uint64_t sz) {
+	return (sha256_mem(sha224, mem, sz));
+}
+
+int			sha224_file(sha224_t *sha224, FILE *file) {
+	return (sha256_file(sha224, file));
 }
