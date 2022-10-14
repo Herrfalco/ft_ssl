@@ -6,11 +6,14 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/13 17:56:14 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 18:07:58 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes.h"
+#include "../../../includes/includes.h"
+
+void		sha512_proc_block(sha512_t *sha512, uint64_t *block);
+void		sha512_proc_last_block(sha512_t *sha512, uint8_t *block_buff, uint128_t sav_sz, uint128_t rem_sz);
 
 char		*sha384_result(sha384_t *sha384) {
 	static char		buff[BUFF_SZ];
@@ -35,9 +38,13 @@ sha384_t	*sha384_new(void) {
 	return (&new);
 }
 
-int			sha384_mem(sha384_t *sha384, uint8_t *mem, uint128_t size) {
-	return (sha512_mem(sha384, mem, size));
+char		*sha384_mem(uint8_t *mem, uint128_t sz) {
+	sha384_t	*sha384 = sha384_new();
+
+	return (hash_mem_64(sha384, mem, sz, sha512_proc_block, sha512_proc_last_block) ? NULL : sha384_result(sha384));
 }
-int			sha384_file(sha384_t *sha384, FILE *file) {
-	return (sha512_file(sha384, file));
+char		*sha384_file(FILE *file) {
+	sha384_t	*sha384 = sha384_new();
+
+	return (hash_file_64(sha384, file, sha512_proc_block, sha512_proc_last_block) ? NULL : sha384_result(sha384));
 }

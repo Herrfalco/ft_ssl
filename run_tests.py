@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/usr/bin/env python3
 
 '''Test module'''
 
@@ -35,9 +35,9 @@ if __name__ == '__main__':
                 print(f"""Error: Can't find "{d}" tests""")
                 sys.exit(1)
             else:
-                os.system(f'cd {d}; make -s re')
-                os.system(f'./{d}/{d}_test {OPT}')
-                os.system(f'cd {d}; make -s fclean')
+                os.system(f'cd {"srcs/algs/" + d}; make -s re')
+                os.system(f'{"srcs/algs/" + d + "/" + d} {OPT}')
+                os.system(f'cd {"srcs/algs/" + d}; make -s fclean')
                 sys.exit(0)
 
     for pid in PIDS:

@@ -6,11 +6,11 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:29:22 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/11 12:47:32 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 17:07:18 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes.h"
+#include "../../../includes/includes.h"
 
 const uint32_t	keys[] = {
 	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
@@ -31,7 +31,7 @@ const uint32_t	keys[] = {
 	0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391 };
 const uint8_t	rot[] = {	7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21 };
 
-char		*md5_result(md5_t *md5) {
+static char		*md5_result(md5_t *md5) {
 	static char		buff[BUFF_SZ];
 	md5_t			sw_md5 = *md5;
 
@@ -43,7 +43,7 @@ char		*md5_result(md5_t *md5) {
 	return (buff);
 }
 
-md5_t		*md5_new(void) {
+static md5_t	*md5_new(void) {
 	static md5_t	new;
 	
 	new.a = 0x01234567,
@@ -107,10 +107,14 @@ static void	md5_proc_last_block(md5_t *md5, uint8_t *block_buff, uint64_t sav_sz
 	md5_proc_block(md5, (uint32_t *)block_buff);
 }
 
-int			md5_mem(md5_t *md5, uint8_t *mem, uint64_t sz) {
-	return (hash_mem_32(md5, mem, sz, md5_proc_block, md5_proc_last_block));
+char		*md5_mem(uint8_t *mem, uint64_t sz) {
+	md5_t		*md5 = md5_new();
+
+	return (hash_mem_32(md5, mem, sz, md5_proc_block, md5_proc_last_block) ? NULL : md5_result(md5));
 }
 
-int			md5_file(md5_t *md5, FILE *file) {
-	return (hash_file_32(md5, file, md5_proc_block, md5_proc_last_block));
+char		*md5_file(FILE *file) {
+	md5_t		*md5 = md5_new();
+
+	return (hash_file_32(md5, file, md5_proc_block, md5_proc_last_block) ? NULL : md5_result(md5));
 }

@@ -1,8 +1,8 @@
-NAME	=	md5_test
-SRCS	=	md5.c \
-		md5_test.c \
-		../common/utils.c \
-		../common/test_utils.c
+NAME	=	sha512
+SRCS	=	sha512.c \
+		sha512_test.c \
+		../../common/utils.c \
+		../../common/test_utils.c
 OBJS	=	$(SRCS:.c=.o)
 CC	=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
@@ -12,7 +12,7 @@ RM	=	rm -rf
 all	:	$(NAME)
 
 $(NAME)	:	$(OBJS)
-		$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
+		$(CC) $(CFLAGS) $^ -o $@ -lcrypto
 
 %.o	:	%.c
 		$(CC) $(CFLAGS) -c $< -o $@

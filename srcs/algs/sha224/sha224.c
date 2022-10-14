@@ -6,11 +6,14 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 18:32:13 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/11 11:15:31 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 18:02:34 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes.h"
+#include "../../../includes/includes.h"
+
+void		sha256_proc_block(sha256_t *sha256, uint32_t *block);
+void		sha256_proc_last_block(sha256_t *sha256, uint8_t *block_buff, uint64_t sav_sz, uint64_t rem_sz);
 
 char		*sha224_result(sha224_t *sha224) {
 	static char		buff[BUFF_SZ];
@@ -36,10 +39,14 @@ sha224_t	*sha224_new(void) {
 	return (&new);
 }
 
-int			sha224_mem(sha224_t *sha224, uint8_t *mem, uint64_t sz) {
-	return (sha256_mem(sha224, mem, sz));
+char		*sha224_mem(uint8_t *mem, uint64_t sz) {
+	sha224_t	*sha224 = sha224_new();
+
+	return (hash_mem_32(sha224, mem, sz, sha256_proc_block, sha256_proc_last_block) ? NULL : sha224_result(sha224));
 }
 
-int			sha224_file(sha224_t *sha224, FILE *file) {
-	return (sha256_file(sha224, file));
+char		*sha224_file(FILE *file) {
+	sha224_t	*sha224 = sha224_new();
+
+	return (hash_file_32(sha224, file, sha256_proc_block, sha256_proc_last_block) ? NULL : sha224_result(sha224));
 }

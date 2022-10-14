@@ -6,11 +6,11 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/13 17:53:23 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 18:07:32 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes.h"
+#include "../../../includes/includes.h"
 
 const uint64_t		keys[] = {	
 	0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
@@ -78,7 +78,7 @@ static uint64_t	*sha512_get_words(uint64_t *block) {
 	return (words);
 }
 
-static void		sha512_proc_block(sha512_t *sha512, uint64_t *block) {
+void		sha512_proc_block(sha512_t *sha512, uint64_t *block) {
 	uint64_t		i;
 	uint64_t		new_a;
 	uint64_t		*words = sha512_get_words(block);
@@ -117,7 +117,7 @@ static void		sha512_proc_block(sha512_t *sha512, uint64_t *block) {
 	sha512->h += sha512_sav.h;
 }
 
-static void		sha512_proc_last_block(sha512_t *sha512, uint8_t *block_buff, uint128_t sav_sz, uint128_t rem_sz) {
+void		sha512_proc_last_block(sha512_t *sha512, uint8_t *block_buff, uint128_t sav_sz, uint128_t rem_sz) {
 	block_buff[rem_sz] = 0x80;
 	if (BIG_BLOCK_SZ - (rem_sz + 1) < 16) {
 		sha512_proc_block(sha512, (uint64_t *)block_buff);
@@ -128,10 +128,14 @@ static void		sha512_proc_last_block(sha512_t *sha512, uint8_t *block_buff, uint1
 	sha512_proc_block(sha512, (uint64_t *)block_buff);
 }
 
-int			sha512_mem(sha512_t *sha512, uint8_t *mem, uint128_t sz) {
-	return (hash_mem_64(sha512, mem, sz, sha512_proc_block, sha512_proc_last_block));
+char		*sha512_mem(uint8_t *mem, uint128_t sz) {
+	sha512_t	*sha512 = sha512_new();
+
+	return (hash_mem_64(sha512, mem, sz, sha512_proc_block, sha512_proc_last_block) ? NULL : sha512_result(sha512));
 }
 
-int			sha512_file(sha512_t *sha512, FILE *file) {
-	return (hash_file_64(sha512, file, sha512_proc_block, sha512_proc_last_block));
+char		*sha512_file(FILE *file) {
+	sha512_t	*sha512 = sha512_new();
+
+	return (hash_file_64(sha512, file, sha512_proc_block, sha512_proc_last_block) ? NULL : sha512_result(sha512));
 }

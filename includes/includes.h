@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:36:40 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/11 13:02:52 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 17:08:05 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,29 +105,19 @@ int				hash_file_32(vals_32_t *vals, FILE *file, proc_block_32_t proc_block, pro
 int				hash_mem_64(vals_64_t *vals, uint8_t *mem, uint128_t sz, proc_block_64_t proc_block, proc_last_block_64_t proc_last_block);
 int				hash_file_64(vals_64_t *vals, FILE *file, proc_block_64_t proc_block, proc_last_block_64_t proc_last_block);
 
-char		*md5_result(md5_t *md5);
-md5_t		*md5_new(void);
-int			md5_mem(md5_t *md5, uint8_t *mem, uint64_t size);
-int			md5_file(md5_t *md5, FILE *file);
+char			*md5_mem(uint8_t *mem, uint64_t size);
+char			*md5_file(FILE *file);
 
-char		*sha256_result(sha256_t *sha256);
-sha256_t	*sha256_new(void);
-int			sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t size);
-int			sha256_file(sha256_t *sha256, FILE *file);
+char			*sha256_mem(uint8_t *mem, uint64_t size);
+char			*sha256_file(FILE *file);
 
-char		*sha224_result(sha224_t *sha224);
-sha224_t	*sha224_new(void);
-int			sha224_mem(sha224_t *sha224, uint8_t *mem, uint64_t size);
-int			sha224_file(sha224_t *sha224, FILE *file);
+char			*sha224_mem(uint8_t *mem, uint64_t size);
+char			*sha224_file(FILE *file);
 
-char		*sha512_result(sha512_t *sha512);
-sha512_t	*sha512_new(void);
-int			sha512_mem(sha512_t *sha512, uint8_t *mem, uint128_t size);
-int			sha512_file(sha512_t *sha512, FILE *file);
+char			*sha512_mem(uint8_t *mem, uint128_t size);
+char			*sha512_file(FILE *file);
 
-char		*sha384_result(sha384_t *sha384);
-sha384_t	*sha384_new(void);
-int			sha384_mem(sha384_t *sha384, uint8_t *mem, uint128_t size);
-int			sha384_file(sha384_t *sha384, FILE *file);
+char			*sha384_mem(uint8_t *mem, uint128_t size);
+char			*sha384_file(FILE *file);
 
 #endif // INCLUDES_H

@@ -1,9 +1,8 @@
-NAME	=	sha384_test
-SRCS	=	../sha512/sha512.c \
-		sha384.c \
-		sha384_test.c \
-		../common/utils.c \
-		../common/test_utils.c
+NAME	=	md5
+SRCS	=	md5.c \
+		md5_test.c \
+		../../common/utils.c \
+		../../common/test_utils.c
 OBJS	=	$(SRCS:.c=.o)
 CC	=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
@@ -13,7 +12,7 @@ RM	=	rm -rf
 all	:	$(NAME)
 
 $(NAME)	:	$(OBJS)
-		$(CC) $(CFLAGS) $^ -o $@ -lcrypto
+		$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
 %.o	:	%.c
 		$(CC) $(CFLAGS) -c $< -o $@

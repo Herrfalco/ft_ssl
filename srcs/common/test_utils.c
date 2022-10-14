@@ -6,11 +6,11 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 18:03:06 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 16:53:34 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 18:40:53 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../test_includes.h"
+#include "../../includes/test_includes.h"
 
 static int		rand_mem(uint8_t **mem, uint64_t mem_sz) {
 	ssize_t		read_ret;
@@ -29,9 +29,16 @@ static int		rand_mem(uint8_t **mem, uint64_t mem_sz) {
 	return (0);
 }
 
+char		*get_filename(char *path) {
+	char	*name, *new_name;
+
+	for (name = strtok(path, "/"); (new_name = strtok(NULL, "/")); name = new_name);
+	return (name);
+}
+
 int			run_tests(int argc, char **argv, exp_test_t exp_test, mem_test_t mem_test, file_test_t file_test) {
 	FILE		*file;
-	uint64_t	mem_sz = MEM_SZ, sz, i;
+	uint64_t	mem_sz = MEM_SZ, sz;
 	uint8_t		*mem = NULL;
 	char		*expect;
 
@@ -46,6 +53,7 @@ int			run_tests(int argc, char **argv, exp_test_t exp_test, mem_test_t mem_test,
 		fprintf(stderr, "Error: Can't generate random data\n");
 		return (2);
 	}
+	argv[0] = get_filename(argv[0]);
 	for (sz = 0; sz <= mem_sz; ++sz) {
 		expect = exp_test(mem, sz);
 		if (!(file = fmemopen(mem, sz, "r"))) {
@@ -55,16 +63,14 @@ int			run_tests(int argc, char **argv, exp_test_t exp_test, mem_test_t mem_test,
 		}
 		if (strcmp(expect, mem_test(mem, sz))
 				|| strcmp(expect, file_test(file))) {
-			fprintf(stderr, "MD5 with %lu byte(s): KO\n", sz);
+			printf("%s with %lu byte(s): KO\n", argv[0], sz);
 			fclose(file);
 			free(mem);
 			return (4);
 		}
 		fclose(file);
 	}
-	for (i = 2; argv[0][i] && argv[0][i] != '/'; ++i);
-	argv[0][i] = '\0';
-	printf("%s with up to %lu byte(s): OK\n", argv[0] + 2, mem_sz);
+	printf("%s with up to %lu byte(s): OK\n", argv[0], mem_sz);
 	free(mem);
 	return (0);
 }

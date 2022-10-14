@@ -1,8 +1,8 @@
-NAME	=	sha256_test
+NAME	=	sha256
 SRCS	=	sha256.c \
 		sha256_test.c \
-		../common/utils.c \
-		../common/test_utils.c
+		../../common/utils.c \
+		../../common/test_utils.c
 OBJS	=	$(SRCS:.c=.o)
 CC	=	gcc
 CFLAGS	=	-Wall -Wextra -Werror

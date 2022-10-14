@@ -6,11 +6,11 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/11 12:49:46 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 17:58:55 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes.h"
+#include "../../../includes/includes.h"
 
 const uint32_t		keys[] = {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
@@ -74,7 +74,7 @@ static uint32_t	*sha256_get_words(uint32_t *block) {
 	return (words);
 }
 
-static void		sha256_proc_block(sha256_t *sha256, uint32_t *block) {
+void		sha256_proc_block(sha256_t *sha256, uint32_t *block) {
 	uint64_t		i;
 	uint32_t		new_a;
 	uint32_t		*words = sha256_get_words(block);
@@ -113,7 +113,7 @@ static void		sha256_proc_block(sha256_t *sha256, uint32_t *block) {
 	sha256->h += sha256_sav.h;
 }
 
-static void		sha256_proc_last_block(sha256_t *sha256, uint8_t *block_buff, uint64_t sav_sz, uint64_t rem_sz) {
+void		sha256_proc_last_block(sha256_t *sha256, uint8_t *block_buff, uint64_t sav_sz, uint64_t rem_sz) {
 	block_buff[rem_sz] = 0x80;
 	if (BLOCK_SZ - (rem_sz + 1) < 8) {
 		sha256_proc_block(sha256, (uint32_t *)block_buff);
@@ -124,10 +124,14 @@ static void		sha256_proc_last_block(sha256_t *sha256, uint8_t *block_buff, uint6
 	sha256_proc_block(sha256, (uint32_t *)block_buff);
 }
 
-int			sha256_mem(sha256_t *sha256, uint8_t *mem, uint64_t sz) {
-	return (hash_mem_32(sha256, mem, sz, sha256_proc_block, sha256_proc_last_block));
+char		*sha256_mem(uint8_t *mem, uint64_t sz) {
+	sha256_t	*sha256 = sha256_new();
+
+	return (hash_mem_32(sha256, mem, sz, sha256_proc_block, sha256_proc_last_block) ? NULL : sha256_result(sha256));
 }
 
-int			sha256_file(sha256_t *sha256, FILE *file) {
-	return (hash_file_32(sha256, file, sha256_proc_block, sha256_proc_last_block));
+char		*sha256_file(FILE *file) {
+	sha256_t	*sha256 = sha256_new();
+
+	return (hash_file_32(sha256, file, sha256_proc_block, sha256_proc_last_block) ? NULL : sha256_result(sha256));
 }
