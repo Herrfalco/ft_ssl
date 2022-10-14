@@ -6,13 +6,13 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:35:49 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/14 17:09:19 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 19:38:02 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/test_includes.h"
 
-char		*md5_exp_test(uint8_t *str, uint64_t sz) {
+static char		*md5_exp_test(uint8_t *str, uint64_t sz) {
     uint8_t			buff[MD5_DIGEST_LENGTH] = { 0 };
 	static char		result[BUFF_SZ] = { 0 };
     uint8_t			i;

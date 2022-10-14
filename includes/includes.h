@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:36:40 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/14 17:08:05 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 19:36:26 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef void	(*proc_last_block_64_t)(vals_64_t *, uint8_t *, uint128_t, uint128_
 void			reverse(void *val, byte_sz_t bs);
 uint32_t		rot_32(uint32_t val, uint16_t n, rot_t typ);
 uint64_t		rot_64(uint64_t val, uint16_t n, rot_t typ);
+
 int				hash_mem_32(vals_32_t *vals, uint8_t *mem, uint64_t sz, proc_block_32_t proc_block, proc_last_block_32_t proc_last_block);
 int				hash_file_32(vals_32_t *vals, FILE *file, proc_block_32_t proc_block, proc_last_block_32_t proc_last_block);
 int				hash_mem_64(vals_64_t *vals, uint8_t *mem, uint128_t sz, proc_block_64_t proc_block, proc_last_block_64_t proc_last_block);

@@ -6,13 +6,13 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 12:06:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 17:21:43 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 19:38:49 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/test_includes.h"
 
-char		*sha256_exp_test(uint8_t *str, uint64_t sz) {
+static char		*sha256_exp_test(uint8_t *str, uint64_t sz) {
     uint8_t			buff[SHA256_DIGEST_LENGTH] = { 0 };
 	static char		result[BUFF_SZ] = { 0 };
     uint8_t			i;

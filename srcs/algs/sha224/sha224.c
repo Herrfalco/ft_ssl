@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 18:32:13 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 18:02:34 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 19:38:17 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void		sha256_proc_block(sha256_t *sha256, uint32_t *block);
 void		sha256_proc_last_block(sha256_t *sha256, uint8_t *block_buff, uint64_t sav_sz, uint64_t rem_sz);
 
-char		*sha224_result(sha224_t *sha224) {
+static char		*sha224_result(sha224_t *sha224) {
 	static char		buff[BUFF_SZ];
 
 	sprintf(buff, "%08x%08x%08x%08x%08x%08x%08x",
@@ -24,7 +24,7 @@ char		*sha224_result(sha224_t *sha224) {
 	return (buff);
 }
 
-sha224_t	*sha224_new(void) {
+static sha224_t	*sha224_new(void) {
 	static sha224_t		new;
 
 

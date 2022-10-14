@@ -6,13 +6,13 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 17:58:55 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 19:41:27 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/includes.h"
 
-const uint32_t		keys[] = {
+static const uint32_t		keys[] = {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
 	0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 	0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
@@ -30,7 +30,7 @@ const uint32_t		keys[] = {
 	0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2 };
 
-char		*sha256_result(sha256_t *sha256) {
+static char		*sha256_result(sha256_t *sha256) {
 	static char		buff[BUFF_SZ];
 
 	sprintf(buff, "%08x%08x%08x%08x%08x%08x%08x%08x",
@@ -39,7 +39,7 @@ char		*sha256_result(sha256_t *sha256) {
 	return (buff);
 }
 
-sha256_t	*sha256_new(void) {
+static sha256_t	*sha256_new(void) {
 	static sha256_t		new;
 
 	new.a = 0x6a09e667;

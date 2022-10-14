@@ -6,13 +6,13 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 18:07:32 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 19:41:46 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/includes.h"
 
-const uint64_t		keys[] = {	
+static const uint64_t		keys[] = {	
 	0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
 	0x3956c25bf348b538, 0x59f111f1b605d019, 0x923f82a4af194f9b, 0xab1c5ed5da6d8118,
 	0xd807aa98a3030242, 0x12835b0145706fbe, 0x243185be4ee4b28c, 0x550c7dc3d5ffb4e2,
@@ -34,7 +34,7 @@ const uint64_t		keys[] = {
 	0x28db77f523047d84, 0x32caab7b40c72493, 0x3c9ebe0a15c9bebc, 0x431d67c49c100d4c,
 	0x4cc5d4becb3e42b6, 0x597f299cfc657e2a, 0x5fcb6fab3ad6faec, 0x6c44198c4a475817 };
 
-char		*sha512_result(sha512_t *sha512) {
+static char		*sha512_result(sha512_t *sha512) {
 	static char		buff[BUFF_SZ];
 
 	sprintf(buff, "%016lx%016lx%016lx%016lx%016lx%016lx%016lx%016lx",
@@ -43,7 +43,7 @@ char		*sha512_result(sha512_t *sha512) {
 	return (buff);
 }
 
-sha512_t	*sha512_new(void) {
+static sha512_t	*sha512_new(void) {
 	static sha512_t		new;
 
 	new.a = 0x6a09e667f3bcc908;

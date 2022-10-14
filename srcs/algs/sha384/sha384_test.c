@@ -6,13 +6,13 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 12:06:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 17:25:06 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 19:39:09 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/test_includes.h"
 
-char		*sha384_exp_test(uint8_t *str, uint64_t sz) {
+static char		*sha384_exp_test(uint8_t *str, uint64_t sz) {
     uint8_t			buff[SHA384_DIGEST_LENGTH] = { 0 };
 	static char		result[BUFF_SZ] = { 0 };
     uint8_t			i;
@@ -24,7 +24,7 @@ char		*sha384_exp_test(uint8_t *str, uint64_t sz) {
 	return (result);
 }
 
-char		*sha384_mem_test(uint8_t *str, uint64_t sz) {
+static char		*sha384_mem_test(uint8_t *str, uint64_t sz) {
 	return (sha384_mem(str, sz));
 }
 

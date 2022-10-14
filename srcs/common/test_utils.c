@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 18:03:06 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 18:40:53 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/14 19:40:35 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int		rand_mem(uint8_t **mem, uint64_t mem_sz) {
 	return (0);
 }
 
-char		*get_filename(char *path) {
+static char		*get_filename(char *path) {
 	char	*name, *new_name;
 
 	for (name = strtok(path, "/"); (new_name = strtok(NULL, "/")); name = new_name);
