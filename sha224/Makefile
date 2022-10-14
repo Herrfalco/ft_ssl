@@ -2,7 +2,8 @@ NAME	=	sha224_test
 SRCS	=	../sha256/sha256.c \
 		sha224.c \
 		sha224_test.c \
-		../common.c
+		../common/utils.c \
+		../common/test_utils.c
 OBJS	=	$(SRCS:.c=.o)
 CC	=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
