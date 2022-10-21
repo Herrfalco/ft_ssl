@@ -6,11 +6,21 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 08:02:56 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 17:16:01 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/20 08:04:15 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/includes.h"
+
+char			*to_upper(const char *str) {
+	static char		buff[BUFF_SZ];
+	uint16_t		i;
+
+	for (i = 0; str[i]; ++i)
+		buff[i] = str[i] >= 'a' && str[i] <= 'z' ? str[i] - 0x20 : str[i];
+	buff[i] = 0;
+	return (buff);
+}
 
 void			reverse(void *val, byte_sz_t bs) {
 	uint8_t			tmp[16], i;
