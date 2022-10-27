@@ -6,28 +6,39 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:45:11 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/14 19:35:40 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/25 12:04:56 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TEST_INCLUDES_H
 #define TEST_INCLUDES_H
 
-#include "includes.h"
 #include <math.h>
 #include <fcntl.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <sys/wait.h>
+#include "../../includes.h"
 
-#define MEM_SZ		(uint64_t)pow(2, 14)
-#define RAND_NB		10
+#define TEST_MAX_SZ		(uint64_t)pow(2, 14)
 
-typedef char	*(*exp_test_t)(uint8_t *, uint64_t sz);
-typedef char	*(*mem_test_t)(uint8_t *, uint64_t sz);
-typedef char	*(*file_test_t)(FILE *file);
+typedef enum		ret_e {
+	RT_OK,
+	RT_KO,
+	RT_RND_GEN,
+	RT_MEM_FILE,
+	RT_FORK,
+	RT_EXIT,
+}					ret_t;
 
-int				run_tests(int argc, char **argv, exp_test_t exp_test, mem_test_t mem_test, file_test_t file_test);
+typedef uint8_t		rets_t;
+
+typedef uint16_t	(*hash_macro_t)(uint8_t *, uint64_t, uint8_t *);
+typedef char		*(*mem_test_t)(uint8_t *, uint64_t sz);
+typedef char		*(*file_test_t)(FILE *file);
+
+char				*expect_hash(alg_t alg, uint8_t *str, uint64_t sz);
+char				*sha384_mem_test(uint8_t *str, uint64_t sz);
+char				*sha512_mem_test(uint8_t *str, uint64_t sz);
 
 #endif	// TEST_INCLUDES_H

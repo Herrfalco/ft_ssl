@@ -6,18 +6,11 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 16:52:32 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/22 08:55:02 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/22 12:03:17 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/includes.h"
-
-static const char			*ALG_STR[] = {
-	"md5",
-	"sha224",
-	"sha256",
-	"sha384",
-	"sha512" };
+#include "../includes.h"
 
 int		disp_help(void) {
 	const char	*help = "ft_ssl ALG [OPTS] [FILES]\n" \
@@ -54,10 +47,6 @@ err_t	error(err_t err, ...) {
 	va_end(datas);
 	fprintf(stderr, "Error: %s\n", buff);
 	return (err);
-}
-
-errs_t	err_2_flag(err_t err) {
-	return (!!err << (err - 1));
 }
 
 char	*parse_alg(alg_t *alg, int *argc, char ***argv) {
@@ -250,8 +239,8 @@ int			main(int argc, char **argv) {
 		return (error(E_UNK_ALG, unk_alg));
 	if ((dup_opt = parse_opts(&opts, &argc, &argv)))
 		return (error(E_DUP_OPT, dup_opt));
-	err |= err_2_flag(proc_stdin(alg, opts, argc));
-	err |= err_2_flag(proc_str(alg, opts, &argc, &argv));
-	err |= err_2_flag(proc_files(alg, opts, &argc, &argv));
+	err |= ret_2_flag(proc_stdin(alg, opts, argc));
+	err |= ret_2_flag(proc_str(alg, opts, &argc, &argv));
+	err |= ret_2_flag(proc_files(alg, opts, &argc, &argv));
 	return (err);
 }

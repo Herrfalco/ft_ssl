@@ -6,11 +6,23 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 08:02:56 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/20 08:04:15 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/22 12:01:30 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/includes.h"
+#include "../includes.h"
+
+const char		*ALG_STR[] = {
+	"md5",
+	"sha224",
+	"sha256",
+	"sha384",
+	"sha512",
+};
+
+uint8_t		ret_2_flag(uint8_t ret) {
+	return (!!ret << (ret - 1));
+}
 
 char			*to_upper(const char *str) {
 	static char		buff[BUFF_SZ];

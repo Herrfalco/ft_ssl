@@ -6,7 +6,7 @@
 /*   By: herrfalco <fcadet@student.42.fr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 06:36:40 by herrfalco         #+#    #+#             */
-/*   Updated: 2022/10/21 10:47:09 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/22 12:02:40 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,9 @@ typedef void	(*proc_last_block_32_t)(vals_32_t *, uint8_t *, uint64_t, uint64_t)
 typedef void	(*proc_block_64_t)(vals_64_t *, uint64_t *);
 typedef void	(*proc_last_block_64_t)(vals_64_t *, uint8_t *, uint128_t, uint128_t);
 
+const char			*ALG_STR[ALG_NB];
+
+uint8_t			ret_2_flag(uint8_t ret);
 char			*to_upper(const char *str);
 void			reverse(void *val, byte_sz_t bs);
 uint32_t		rot_32(uint32_t val, uint16_t n, rot_t typ);
