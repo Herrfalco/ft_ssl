@@ -6,11 +6,13 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 18:03:06 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 15:37:02 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/27 17:46:09 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test_includes.h"
+#include "../hdrs/tests.h"
+#include "../hdrs/utils.h"
+#include "../hdrs/algs.h"
 
 static rets_t	test_ret(ret_t ret, ...) {
 	const char			*ret_str[] = {

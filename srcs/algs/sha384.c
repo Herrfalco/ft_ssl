@@ -6,14 +6,13 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/22 09:39:45 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/27 17:24:55 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes.h"
-
-void		sha512_proc_block(sha512_t *sha512, uint64_t *block);
-void		sha512_proc_last_block(sha512_t *sha512, uint8_t *block_buff, uint128_t sav_sz, uint128_t rem_sz);
+#include "../../hdrs/defines.h"
+#include "../../hdrs/common.h"
+#include "../../hdrs/shared.h"
 
 static char		*sha384_result(sha384_t *sha384) {
 	static char		buff[BUFF_SZ];

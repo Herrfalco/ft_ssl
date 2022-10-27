@@ -6,130 +6,14 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 16:52:32 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/22 12:03:17 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/27 17:17:53 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes.h"
+#include "../../hdrs/core.h"
+#include "../../hdrs/utils.h"
 
-int		disp_help(void) {
-	const char	*help = "ft_ssl ALG [OPTS] [FILES]\n" \
-		"	ALG:\n" \
-		"		md5\n" \
-		"		sha224\n" \
-		"		sha256\n" \
-		"		sha384\n" \
-		"		sha512\n" \
-		"	OPTS:\n" \
-		"		-p	Echo stdin\n" \
-		"		-q	Quiet mode\n" \
-		"		-r	Reverse format\n" \
-		"		-s	Hash string\n";
-
-	printf("%s", help);
-	return (0);
-}
-
-err_t	error(err_t err, ...) {
-	const char		*err_str[] = {
-		"Unknown algorithm \"%s\"",
-		"Duplicated option \"%s\"",
-		"No string specified",
-		"Can't hash stdin",
-		"Can't hash memory",
-		"Can't hash file \"%s\"",
-	};
-	char					buff[BUFF_SZ];
-	va_list					datas;
-
-	va_start(datas, err);
-	vsnprintf(buff, BUFF_SZ, err_str[err - 1], datas);
-	va_end(datas);
-	fprintf(stderr, "Error: %s\n", buff);
-	return (err);
-}
-
-char	*parse_alg(alg_t *alg, int *argc, char ***argv) {
-		int				i;
-
-		for (i = 0; i < ALG_NB; ++i) {
-			if (!strcmp(**argv, ALG_STR[i])) {
-				--(*argc);
-				++(*argv);
-				*alg = i;
-				return (NULL);
-			}
-		}
-		return (**argv);
-}
-
-static void			opt_set(uint8_t *opts, opt_t opt) {
-	*opts |= (0x1 << opt);
-}
-
-static int			opt_isset(uint8_t opts, opt_t opt) {
-	return (opts & (0x1 << opt));
-}
-
-char	*parse_opts(opts_t *opts, int *argc, char ***argv) {
-	const char			*OPT_STR[] = {
-		"-p",
-		"-q",
-		"-r",
-		"-s" };
-	int				i, is_opt = 1;
-
-	*opts = 0;
-	for (; *argc; --(*argc), ++(*argv)) {
-		for (i = 0, is_opt = 0; i < OPT_NB; ++i) {
-			if ((is_opt = !strcmp(OPT_STR[i], **argv))) {
-				if (opt_isset(*opts, i))
-					return (**argv);
-				opt_set(opts, i);
-				break;
-			}
-		}
-		if (!is_opt)
-			break;
-	}
-	return (NULL);
-}
-
-char		*hash_mem(alg_t alg, uint8_t *mem, uint128_t sz) {
-	switch (alg) {
-		case A_MD5:
-			return (md5_mem(mem, sz));
-		case A_SHA224:
-			return (sha224_mem(mem, sz));
-		case A_SHA256:
-			return (sha256_mem(mem, sz));
-		case A_SHA384:
-			return (sha384_mem(mem, sz));
-		case A_SHA512:
-			return (sha512_mem(mem, sz));
-		default:
-			return (NULL);
-	}
-}
-
-char		*hash_file(alg_t alg, FILE *file) {
-	switch (alg) {
-		case A_MD5:
-			return (md5_file(file));
-		case A_SHA224:
-			return (sha224_file(file));
-		case A_SHA256:
-			return (sha256_file(file));
-		case A_SHA384:
-			return (sha384_file(file));
-		case A_SHA512:
-			return (sha512_file(file));
-		default:
-			return (NULL);
-	}
-}
-
-uint8_t			*stdin_2_mem(uint128_t *sz) {
+static uint8_t			*stdin_2_mem(uint128_t *sz) {
 	ssize_t				read_ret = 0;
 	uint8_t				*old_mem = NULL;
 	static uint8_t		*mem;
@@ -147,7 +31,7 @@ uint8_t			*stdin_2_mem(uint128_t *sz) {
 	return (mem);
 }
 
-err_t		proc_stdin(alg_t alg, opts_t opts, int argc) {
+static err_t		proc_stdin(alg_t alg, opts_t opts, int argc) {
 	char		*hash;
 	uint8_t		*stdin_mem;
 	uint128_t	mem_sz;
@@ -177,7 +61,7 @@ err_t		proc_stdin(alg_t alg, opts_t opts, int argc) {
 	return (E_NO_ERR);
 }
 
-err_t		proc_str(alg_t alg, opts_t opts, int *argc, char ***argv) {
+static err_t		proc_str(alg_t alg, opts_t opts, int *argc, char ***argv) {
 	char		*hash;
 
 	if (opt_isset(opts, O_STR)) {
@@ -200,7 +84,7 @@ err_t		proc_str(alg_t alg, opts_t opts, int *argc, char ***argv) {
 	return (E_NO_ERR);
 }
 
-err_t		proc_files(alg_t alg, opts_t opts, int *argc, char ***argv) {
+static err_t		proc_files(alg_t alg, opts_t opts, int *argc, char ***argv) {
 	FILE		*file;
 	char		*hash;
 	err_t		err = 0;

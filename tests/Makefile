@@ -1,13 +1,17 @@
-NAME	=	ft_ssl_test
+NAME	=	ft_ssl_tests
 SRCS	=	expect.c \
 		tests.c \
 		unifiers.c \
-		../utils.c \
-		../algs/md5.c \
-		../algs/sha224.c \
-		../algs/sha256.c \
-		../algs/sha384.c \
-		../algs/sha512.c
+		../srcs/common.c \
+		../srcs/utils.c \
+		../srcs/algs/md5.c \
+		../srcs/algs/sha224.c \
+		../srcs/algs/sha256.c \
+		../srcs/algs/sha384.c \
+		../srcs/algs/sha512.c \
+		../srcs/core/dispatch.c \
+		../srcs/core/errors.c \
+		../srcs/core/params.c
 OBJS	=	$(SRCS:.c=.o)
 CC	=	gcc
 CFLAGS	=	-Wall -Wall -Wextra

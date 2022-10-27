@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_includes.h                                    :+:      :+:    :+:   */
+/*   tests.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:45:11 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/25 12:04:56 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/27 17:44:11 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEST_INCLUDES_H
-#define TEST_INCLUDES_H
+#ifndef TEST_H
+#define TEST_H
 
+#include "../hdrs/types.h"
 #include <math.h>
 #include <fcntl.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
 #include <sys/wait.h>
-#include "../../includes.h"
 
 #define TEST_MAX_SZ		(uint64_t)pow(2, 14)
 
@@ -41,4 +41,4 @@ char				*expect_hash(alg_t alg, uint8_t *str, uint64_t sz);
 char				*sha384_mem_test(uint8_t *str, uint64_t sz);
 char				*sha512_mem_test(uint8_t *str, uint64_t sz);
 
-#endif	// TEST_INCLUDES_H
+#endif	// TEST_H

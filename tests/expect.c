@@ -6,11 +6,12 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 09:01:53 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 15:09:35 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/10/27 17:44:34 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test_includes.h"
+#include "../hdrs/tests.h"
+#include "../hdrs/defines.h"
 
 static uint16_t		md5_macro(uint8_t *str, uint64_t sz, uint8_t *buff) {
     MD5((const unsigned char *)str, sz, buff);

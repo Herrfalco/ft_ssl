@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unifiers.c                                         :+:      :+:    :+:   */
+/*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/22 09:06:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/25 11:57:54 by fcadet           ###   ########.fr       */
+/*   Created: 2022/10/27 17:06:27 by fcadet            #+#    #+#             */
+/*   Updated: 2022/10/27 17:06:56 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test_includes.h"
+#ifndef DEFINES_H
+#define DEFINES_H
 
-char		*sha384_mem_test(uint8_t *str, uint64_t sz) {
-	return (sha384_mem(str, sz));
-}
+#define PAGE_SZ			4096
+#define BUFF_SZ			256
+#define BLOCK_SZ		64
+#define BIG_BLOCK_SZ	128
+#define BIG_RND_NB		80
+#define	OPT_NB			4
+#define ALG_NB			5
 
-char		*sha512_mem_test(uint8_t *str, uint64_t sz) {
-	return (sha512_mem(str, sz));
-}
+#endif // DEFINES_H
