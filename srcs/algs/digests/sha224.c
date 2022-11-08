@@ -6,13 +6,13 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 18:32:13 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:23:47 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/08 08:52:22 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdrs/defines.h"
-#include "../../hdrs/common.h"
-#include "../../hdrs/shared.h"
+#include "../../../hdrs/defines.h"
+#include "../../../hdrs/common.h"
+#include "../../../hdrs/shared.h"
 
 static char		*sha224_result(sha224_t *sha224) {
 	static char		buff[BUFF_SZ];

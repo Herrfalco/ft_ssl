@@ -6,12 +6,12 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/11/08 08:11:57 by herrfalco        ###   ########.fr       */
+/*   Updated: 2022/11/08 08:52:40 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdrs/utils.h"
-#include "../../hdrs/common.h"
+#include "../../../hdrs/utils.h"
+#include "../../../hdrs/common.h"
 
 static const uint64_t		keys[] = {	
 	0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,

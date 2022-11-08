@@ -4,11 +4,11 @@ SRCS	=	expect.c \
 		unifiers.c \
 		../srcs/common.c \
 		../srcs/utils.c \
-		../srcs/algs/md5.c \
-		../srcs/algs/sha224.c \
-		../srcs/algs/sha256.c \
-		../srcs/algs/sha384.c \
-		../srcs/algs/sha512.c \
+		../srcs/algs/digests/md5.c \
+		../srcs/algs/digests/sha224.c \
+		../srcs/algs/digests/sha256.c \
+		../srcs/algs/digests/sha384.c \
+		../srcs/algs/digests/sha512.c \
 		../srcs/core/dispatch.c \
 		../srcs/core/errors.c \
 		../srcs/core/params.c
