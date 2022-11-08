@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:25:09 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/08 07:14:44 by herrfalco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static const uint64_t		keys[] = {
 static char		*sha512_result(sha512_t *sha512) {
 	static char		buff[BUFF_SZ];
 
-	sprintf(buff, "%016lx%016lx%016lx%016lx%016lx%016lx%016lx%016lx",
+	sprintf(buff, "%016llx%016llx%016llx%016llx%016llx%016llx%016llx%016llx",
 			sha512->a, sha512->b, sha512->c, sha512->d,
 			sha512->e, sha512->f, sha512->g, sha512->h);
 	return (buff);

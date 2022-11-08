@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 12:36:57 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:24:55 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/08 07:14:18 by herrfalco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 static char		*sha384_result(sha384_t *sha384) {
 	static char		buff[BUFF_SZ];
 
-	sprintf(buff, "%016lx%016lx%016lx%016lx%016lx%016lx",
+	sprintf(buff, "%016llx%016llx%016llx%016llx%016llx%016llx",
 			sha384->a, sha384->b, sha384->c, sha384->d,
 			sha384->e, sha384->f);
 	return (buff);

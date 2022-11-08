@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 16:52:32 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:17:53 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/08 07:29:47 by herrfalco        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ static err_t		proc_str(alg_t alg, opts_t opts, int *argc, char ***argv) {
 static err_t		proc_files(alg_t alg, opts_t opts, int *argc, char ***argv) {
 	FILE		*file;
 	char		*hash;
-	err_t		err = 0;
+	err_t		err = E_NO_ERR;
 
 	for (; *argc; --*argc, ++*argv) {
 		if (!(file = fopen(**argv, "r"))
 			|| !(hash = hash_file(alg, file))) {
-			err |= error(E_HASH_FILE, **argv);
+			err = error(E_HASH_FILE, **argv);
 			if (file)
 				fclose(file);
 			continue;
@@ -106,14 +106,14 @@ static err_t		proc_files(alg_t alg, opts_t opts, int *argc, char ***argv) {
 			printf("%s (%s) = %s\n",
 					to_upper(ALG_STR[alg]), **argv, hash);
 	}
-	return (E_NO_ERR);
+	return (err);
 }
 
 int			main(int argc, char **argv) {
 	opts_t		opts = 0;
 	alg_t		alg;
 	char		*unk_alg, *dup_opt;
-	errs_t		err = 0;
+	errs_t		err = E_NO_ERR;
 
 	if (argc < 2)
 		return (disp_help());

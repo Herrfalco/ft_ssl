@@ -13,7 +13,6 @@ SRCS	=	srcs/common.c \
 OBJS	=	$(SRCS:.c=.o)
 CC	=	gcc
 CFLAGS	=	-Wall -Wall -Wextra
-LIBS	=	-lcrypto
 
 all	:	$(NAME)
 
