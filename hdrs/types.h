@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 16:50:33 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:09:37 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/08 09:12:21 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,17 @@ typedef enum		alg_e {
 	A_SHA512,
 }					alg_t;
 
-typedef uint8_t		opts_t;
+typedef uint16_t	opts_t;
 
 typedef enum		opt_e {
 	O_PRINT,
 	O_QUIET,
 	O_REV,
 	O_STR,
+	O_DEC,
+	O_ENC,
+	O_IN,
+	O_OUT,
 }					opt_t;
 
 typedef enum		byte_sz_e {

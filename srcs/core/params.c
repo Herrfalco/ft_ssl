@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 16:39:37 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:17:58 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/08 09:19:05 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ char	*parse_alg(alg_t *alg, int *argc, char ***argv) {
 		return (**argv);
 }
 
-static void		opt_set(uint8_t *opts, opt_t opt) {
+static void		opt_set(opts_t *opts, opt_t opt) {
 	*opts |= (0x1 << opt);
 }
 
-int				opt_isset(uint8_t opts, opt_t opt) {
+int				opt_isset(opts_t opts, opt_t opt) {
 	return (opts & (0x1 << opt));
 }
 
@@ -39,7 +39,12 @@ char	*parse_opts(opts_t *opts, int *argc, char ***argv) {
 		"-p",
 		"-q",
 		"-r",
-		"-s" };
+		"-s",
+		"-d",
+		"-e",
+		"-i",
+		"-o",
+	};
 	int				i, is_opt = 1;
 
 	*opts = 0;
