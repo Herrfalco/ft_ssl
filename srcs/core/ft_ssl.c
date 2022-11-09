@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 16:52:32 by fcadet            #+#    #+#             */
-/*   Updated: 2022/11/08 07:29:47 by herrfalco        ###   ########.fr       */
+/*   Updated: 2022/11/09 18:23:38 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static err_t		proc_str(alg_t alg, opts_t opts, int *argc, char ***argv) {
 	char		*hash;
 
 	if (opt_isset(opts, O_STR)) {
-		if (!argc)
+		if (!*argc)
 			return (error(E_NO_STR));
 		if (!(hash = hash_mem(alg, (uint8_t *)**argv, strlen(**argv))))
 			return (error(E_HASH_MEM));
