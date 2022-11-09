@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 16:52:32 by fcadet            #+#    #+#             */
-/*   Updated: 2022/11/08 07:29:47 by herrfalco        ###   ########.fr       */
+/*   Updated: 2022/11/09 18:15:05 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,11 @@ static err_t		proc_files(alg_t alg, opts_t opts, int *argc, char ***argv) {
 	return (err);
 }
 
+//err_t	b64_file(FILE *dst, FILE *src);
+
 int			main(int argc, char **argv) {
 	opts_t		opts = 0;
+	opt_t		uns;
 	alg_t		alg;
 	char		*unk_alg, *dup_opt;
 	errs_t		err = E_NO_ERR;
@@ -123,6 +126,17 @@ int			main(int argc, char **argv) {
 		return (error(E_UNK_ALG, unk_alg));
 	if ((dup_opt = parse_opts(&opts, &argc, &argv)))
 		return (error(E_DUP_OPT, dup_opt));
+
+	if ((uns = get_uns_opt(alg, opts))
+			!= O_NO_OPT)
+		return (ret_2_flag(error(E_UNS_OPT,
+			ALG_STR[alg], OPT_STR[uns])));
+
+	if (alg == A_BASE64) {
+		printf("here\n");
+		return (0);
+	}
+
 	err |= ret_2_flag(proc_stdin(alg, opts, argc));
 	err |= ret_2_flag(proc_str(alg, opts, &argc, &argv));
 	err |= ret_2_flag(proc_files(alg, opts, &argc, &argv));

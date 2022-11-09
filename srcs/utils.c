@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 08:02:56 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:21:59 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/09 18:08:35 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,29 @@ const char		*ALG_STR[] = {
 	"sha256",
 	"sha384",
 	"sha512",
+	"base64",
+};
+
+const char		*OPT_STR[] = {
+	"-p",
+	"-q",
+	"-r",
+	"-s",
+	"-d",
+	"-e",
+	"-i",
+	"-o",
+};
+
+const char		*OPT_INFO[] = {
+	"Echo stdin",
+	"Quiet mode",
+	"Reverse format",
+	"Hash string",
+	"Decrypt",
+	"Encrypt",
+	"Input file",
+	"Ouput file",
 };
 
 uint8_t		ret_2_flag(uint8_t ret) {

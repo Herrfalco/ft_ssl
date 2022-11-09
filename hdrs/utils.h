@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 16:59:35 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:10:48 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/08 11:54:04 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "defines.h"
 
 const char		*ALG_STR[ALG_NB];
+const char		*OPT_STR[OPT_NB];
+const char		*OPT_INFO[OPT_NB];
 
 uint8_t			ret_2_flag(uint8_t ret);
 char			*to_upper(const char *str);

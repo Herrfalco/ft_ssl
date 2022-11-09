@@ -6,28 +6,29 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 16:38:43 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:17:46 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/09 18:11:39 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdrs/types.h"
-#include "../../hdrs/defines.h"
+#include "../../hdrs/utils.h"
 
 int		disp_help(void) {
-	const char	*help = "ft_ssl ALG [OPTS] [FILES]\n" \
-		"  ALG:\n" \
-		"    md5\n" \
-		"    sha224\n" \
-		"    sha256\n" \
-		"    sha384\n" \
-		"    sha512\n" \
-		"  OPTS:\n" \
-		"    -p	Echo stdin\n" \
-		"    -q	Quiet mode\n" \
-		"    -r	Reverse format\n" \
-		"    -s	Hash string\n";
+	int i;
 
-	printf("%s", help);
+	printf("\n%-15s\t\tft_ssl DIG [OPTS] [...files...]\n\n" \
+			"\tDIG:\n", "Message Digest:");
+	for (i = 0; i < DIG_NB; ++i)
+		printf("\t\t%s\n", ALG_STR[i]);
+	printf("\tOPTS:\n");
+	for (i = 0; i < DIG_O_NB; ++i)
+		printf("\t\t%s\t%s\n", OPT_STR[i], OPT_INFO[i]);
+	printf("\n%-15s\t\tft_ssl CIP [OPTS]\n\n\tCIP:\n",
+			"Cypher:");
+	for (i = DIG_NB; i < ALG_NB; ++i)
+		printf("\t\t%s\n", ALG_STR[i]);
+	printf("\tOPTS:\n");
+	for (i = DIG_O_NB; i < OPT_NB; ++i)
+		printf("\t\t%s\t%s\n", OPT_STR[i], OPT_INFO[i]);
 	return (0);
 }
 
@@ -39,6 +40,8 @@ err_t	error(err_t err, ...) {
 		"Can't hash stdin",
 		"Can't hash memory",
 		"Can't hash file \"%s\"",
+		"Input/Output error",
+		"Can't use \"%s\" with \"%s\"",
 	};
 	char					buff[BUFF_SZ];
 	va_list					datas;

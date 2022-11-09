@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 17:00:52 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:05:30 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/09 16:52:48 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,8 @@ char	*sha512_file(FILE *file);
 
 char	*sha384_mem(uint8_t *mem, uint128_t size);
 char	*sha384_file(FILE *file);
+
+err_t	b64_mem(FILE *dst, uint8_t *mem, uint64_t sz);
+err_t	b64_file(FILE *dst, FILE *src);
 
 #endif // ALGS_H

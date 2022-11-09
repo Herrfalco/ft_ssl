@@ -6,6 +6,7 @@ SRCS	=	srcs/common.c \
 		srcs/algs/digests/sha256.c \
 		srcs/algs/digests/sha384.c \
 		srcs/algs/digests/sha512.c \
+		srcs/algs/cyphers/base64.c \
 		srcs/core/dispatch.c \
 		srcs/core/errors.c \
 		srcs/core/ft_ssl.c \

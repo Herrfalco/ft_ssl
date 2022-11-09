@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 16:39:37 by fcadet            #+#    #+#             */
-/*   Updated: 2022/11/08 09:19:05 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/09 18:10:36 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,6 @@ int				opt_isset(opts_t opts, opt_t opt) {
 }
 
 char	*parse_opts(opts_t *opts, int *argc, char ***argv) {
-	const char			*OPT_STR[] = {
-		"-p",
-		"-q",
-		"-r",
-		"-s",
-		"-d",
-		"-e",
-		"-i",
-		"-o",
-	};
 	int				i, is_opt = 1;
 
 	*opts = 0;
@@ -61,4 +51,17 @@ char	*parse_opts(opts_t *opts, int *argc, char ***argv) {
 			break;
 	}
 	return (NULL);
+}
+
+opt_t	get_uns_opt(alg_t alg, opts_t opts) {
+	uint8_t		i, start = 0, end = O_DEC;
+
+	if (alg < A_BASE64) {
+		start = end;
+		end = O_NO_OPT;
+	}
+	for (i = start; i < end; ++i)
+		if (opt_isset(opts, i))
+			return (i);
+	return (O_NO_OPT);
 }

@@ -6,7 +6,7 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 16:42:15 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:04:24 by fcadet           ###   ########.fr       */
+/*   Updated: 2022/11/09 17:17:03 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ char	*hash_file(alg_t alg, FILE *file);
 char	*parse_alg(alg_t *alg, int *argc, char ***argv);
 int		opt_isset(uint8_t opts, opt_t opt);
 char	*parse_opts(opts_t *opts, int *argc, char ***argv);
+opt_t	get_uns_opt(alg_t alg, opts_t opts);
 
 #endif // CORE_H
