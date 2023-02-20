@@ -14,7 +14,7 @@ SRCS	=	expect.c \
 		../srcs/core/params.c
 OBJS	=	$(SRCS:.c=.o)
 CC	=	gcc
-CFLAGS	=	-Wall -Wall -Wextra
+CFLAGS	=	-Wall -Wall -Wextra -Wno-deprecated-declarations
 LIBS	=	-lcrypto
 
 all	:	$(NAME)

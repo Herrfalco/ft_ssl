@@ -6,14 +6,14 @@
 /*   By: fcadet <fcadet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:45:11 by fcadet            #+#    #+#             */
-/*   Updated: 2022/10/27 17:44:11 by fcadet           ###   ########.fr       */
+/*   Updated: 2023/02/20 11:04:06 by fcadet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TEST_H
 #define TEST_H
 
-#include "../hdrs/types.h"
+#include "types.h"
 #include <math.h>
 #include <fcntl.h>
 #include <openssl/md5.h>
